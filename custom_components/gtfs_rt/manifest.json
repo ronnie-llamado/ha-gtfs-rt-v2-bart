@@ -1,14 +1,14 @@
 {
-    "domain": "gtfs_rt",
-    "name": "GTFS-Realtime",
-    "documentation": "https://github.com/mark1foley/ha-gtfs-rt-v2",
-    "issue_tracker": "https://github.com/mark1foley/ha-gtfs-rt-v2/issues",
+    "domain": "gtfs_rt_bart",
+    "name": "GTFS-Realtime-BART",
+    "documentation": "https://github.com/ronnie-llamado/ha-gtfs-rt-v2-bart",
+    "issue_tracker": "https://github.com/ronnie-llamado/ha-gtfs-rt-v2-bart/issues",
     "dependencies": [],
     "codeowners": [
-        "@mark1foley"
+        "@ronnie-llamado"
     ],
     "requirements": [
         "gtfs-realtime-bindings==1.0.0"
     ],
-    "version": "1.20220411.03"
+    "version": "1.20251111.01"
 }

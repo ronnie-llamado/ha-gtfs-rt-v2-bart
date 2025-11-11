@@ -3,7 +3,9 @@
 This project contains a new sensor that provides real-time departure data for
 local transit systems that provide gtfs feeds.
 
-It is based on the excellent work that has been done previously by @zacs and @phardy.  Originally inspired by a desire to make the existing code work with realtime data for trains and buses provided by Translink in Queensland, Australia (who have unique route ids for each route/calendar combination) this version also contains a number of other improvements.
+It is based on the excellent work that has been done previously by @zacs, @phardy, and @mark1foley.  Originally inspired by a desire to make the existing code work with realtime data for trains and buses provided by Translink in Queensland, Australia (who have unique route ids for each route/calendar combination) this version also contains a number of other improvements.
+
+This fork has been modified specifically for Bay Area Rapid Transit (BART).
 
 ## Installation (HACS) - Recommended
 0. Have [HACS](https://hacs.xyz/) installed, this will allow you to easily update

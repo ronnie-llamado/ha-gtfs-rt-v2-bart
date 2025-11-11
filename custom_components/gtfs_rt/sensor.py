@@ -1,5 +1,6 @@
 import logging
 from datetime import datetime, timedelta
+import csv
 
 import homeassistant.helpers.config_validation as cv
 import homeassistant.util.dt as dt_util
@@ -42,9 +43,11 @@ DEFAULT_API_KEY_HEADER_NAME = 'Authorization'
 MIN_TIME_BETWEEN_UPDATES = timedelta(seconds=60)
 TIME_STR_FORMAT = "%H:%M"
 
+BART_TRIP_UPDATE_URL = 'https://api.bart.gov/gtfsrt/tripupdateplatform.aspx'
+
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     {
-        vol.Required(CONF_TRIP_UPDATE_URL): cv.string,
+        vol.Optional(CONF_TRIP_UPDATE_URL): cv.string,
         vol.Optional(CONF_API_KEY): cv.string,
         vol.Optional(CONF_X_API_KEY): cv.string,
         vol.Optional(
@@ -102,7 +105,7 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
     """Get the public transport sensor."""
 
     data = PublicTransportData(
-        config.get(CONF_TRIP_UPDATE_URL),
+        config.get(CONF_TRIP_UPDATE_URL, BART_TRIP_UPDATE_URL),
         config.get(CONF_VEHICLE_POSITION_URL),
         config.get(CONF_ROUTE_DELIMITER),
         config.get(CONF_API_KEY),
@@ -293,6 +296,7 @@ class PublicTransportData(object):
         else:
             self._headers = None
         self.info = {}
+        self._load_trips_static_data('trips.txt')
 
     @Throttle(MIN_TIME_BETWEEN_UPDATES)
     def update(self):
@@ -360,6 +364,9 @@ class PublicTransportData(object):
 
                 else:
                     route_id = entity.trip_update.trip.route_id
+
+                if route_id == '':
+                    route_id = self._get_route_id_by_trip_id(entity.trip_update.trip.trip_id)
 
                 if route_id not in departure_times:
                     departure_times[route_id] = {}
@@ -461,3 +468,19 @@ class PublicTransportData(object):
             positions[vehicle.trip.trip_id] = vehicle.position
 
         return positions
+
+    # Create a lookup table for route_id by trip_id
+    def _load_trips_static_data(self, filename):
+        lookup_table = {}
+        with open(filename, 'r', newline='') as csvfile:
+            for row in csv.DictReader(csvfile):
+                if 'trip_id' in row:
+                    lookup_table[row['trip_id']] = row['route_id']
+                else:
+                    pass
+
+        self._trips_static_data = lookup_table
+
+    def _get_route_id_by_trip_id(self, trip_id):
+        return self._trips_static_data.get(trip_id, '')
+
