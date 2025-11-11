@@ -43,9 +43,11 @@ DEFAULT_API_KEY_HEADER_NAME = 'Authorization'
 MIN_TIME_BETWEEN_UPDATES = timedelta(seconds=60)
 TIME_STR_FORMAT = "%H:%M"
 
+BART_TRIP_UPDATE_URL = 'https://api.bart.gov/gtfsrt/tripupdateplatform.aspx'
+
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     {
-        vol.Required(CONF_TRIP_UPDATE_URL): cv.string,
+        vol.Optional(CONF_TRIP_UPDATE_URL): cv.string,
         vol.Optional(CONF_API_KEY): cv.string,
         vol.Optional(CONF_X_API_KEY): cv.string,
         vol.Optional(
@@ -77,7 +79,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
 
 def due_in_minutes(timestamp):
     """Get the remaining minutes from now until a given datetime object."""
-    diff = timestamp - dt_util.now().replace(tzinfo=None)
+    diff = timestamp - datetime.now()
     return int(diff.total_seconds() / 60)
 
 
@@ -103,7 +105,7 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
     """Get the public transport sensor."""
 
     data = PublicTransportData(
-        config.get(CONF_TRIP_UPDATE_URL),
+        config.get(CONF_TRIP_UPDATE_URL, BART_TRIP_UPDATE_URL),
         config.get(CONF_VEHICLE_POSITION_URL),
         config.get(CONF_ROUTE_DELIMITER),
         config.get(CONF_API_KEY),

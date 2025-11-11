@@ -1,4 +1,3 @@
-trip_update_url: 'https://api.bart.gov/gtfsrt/tripupdateplatform.aspx'
 departures:
 - name: 'Berryessa/North San Jose to Richmond'
   route: '3'

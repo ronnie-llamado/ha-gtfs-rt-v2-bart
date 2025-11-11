@@ -36,10 +36,11 @@ sys.path.append("lib")
 _LOGGER = logging.getLogger(__name__)
 
 CONF_NAME = "name"
+BART_TRIP_UPDATE_URL = "https://api.bart.gov/gtfsrt/tripupdateplatform.aspx"
 
 PLATFORM_SCHEMA = Schema(
     {
-        CONF_TRIP_UPDATE_URL: str,
+        Optional(CONF_TRIP_UPDATE_URL): str,
         Optional(CONF_API_KEY): str,
         Optional(CONF_X_API_KEY): str,
         Optional(CONF_API_KEY_HEADER_NAME): str,
@@ -99,7 +100,7 @@ if __name__ == "__main__":
         logging.info("Input file configuration is valid.")
 
         data = PublicTransportData(
-            configuration.get(CONF_TRIP_UPDATE_URL),
+            configuration.get(CONF_TRIP_UPDATE_URL, BART_TRIP_UPDATE_URL),
             configuration.get(CONF_VEHICLE_POSITION_URL),
             configuration.get(CONF_ROUTE_DELIMITER),
             configuration.get(CONF_API_KEY, None),
