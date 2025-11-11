@@ -32,6 +32,8 @@ sensor:
     - name: 'Berryessa/North San Jose to Richmond'
       route: '3'
       stopid: 'S40-2'
+      icon: mdi:train
+      service_type: 'train'
 ```
 
 Configuration variables:

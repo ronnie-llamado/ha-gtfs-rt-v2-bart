@@ -1,6 +1,7 @@
 import logging
 from datetime import datetime, timedelta
 import csv
+import os
 
 import homeassistant.helpers.config_validation as cv
 import homeassistant.util.dt as dt_util
@@ -20,6 +21,7 @@ ATTR_DIRECTION_ID = "Direction ID"
 ATTR_DUE_IN = "Due in"
 ATTR_DUE_AT = "Due at"
 ATTR_NEXT_UP = "Next Service"
+ATTR_NEXT_UP_DUE_IN = "Next Service Due In"
 ATTR_ICON = "Icon"
 
 CONF_API_KEY = "api_key"
@@ -43,7 +45,12 @@ DEFAULT_API_KEY_HEADER_NAME = 'Authorization'
 MIN_TIME_BETWEEN_UPDATES = timedelta(seconds=60)
 TIME_STR_FORMAT = "%H:%M"
 
+CURRENT_DIRECTORY = os.path.dirname(os.path.abspath(__file__))
+TRIPS_TXT_FILENAME = os.path.join(CURRENT_DIRECTORY, 'trips.txt')
 BART_TRIP_UPDATE_URL = 'https://api.bart.gov/gtfsrt/tripupdateplatform.aspx'
+
+print(CURRENT_DIRECTORY)
+print(TRIPS_TXT_FILENAME)
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     {
@@ -186,6 +193,16 @@ class PublicTransportSensor(Entity):
         )
 
     @property
+    def state_next(self):
+        """Return the state of the sensor."""
+        next_services = self._get_next_services()
+        return (
+            due_in_minutes(next_services[1].arrival_time)
+            if len(next_services) > 0
+            else "-"
+        )
+
+    @property
     def extra_state_attributes(self):
         """Return the state attributes."""
         next_services = self._get_next_services()
@@ -211,6 +228,7 @@ class PublicTransportSensor(Entity):
                 if len(next_services) > 1
                 else "-"
             )
+            attrs[ATTR_NEXT_UP_DUE_IN] = self.state_next
         return attrs
 
     @property
@@ -272,6 +290,11 @@ class PublicTransportSensor(Entity):
         except KeyError:
             log_info(["Next " + self._service_type, "not defined"], 1)
 
+        try:
+            log_info([ATTR_NEXT_UP_DUE_IN, self.state_next], 1)
+        except KeyError:
+            log_info(["Next " + self._service_type, "not defined"], 1)
+
 
 class PublicTransportData(object):
     """The Class for handling the data retrieval."""
@@ -296,7 +319,7 @@ class PublicTransportData(object):
         else:
             self._headers = None
         self.info = {}
-        self._load_trips_static_data('trips.txt')
+        self._load_trips_static_data(TRIPS_TXT_FILENAME)
 
     @Throttle(MIN_TIME_BETWEEN_UPDATES)
     def update(self):

@@ -2,12 +2,24 @@ departures:
 - name: 'Berryessa/North San Jose to Richmond'
   route: '3'
   stopid: 'S40-2'
+  icon: mdi:train
+  service_type: 'train'
+
 - name: 'Richmond to Berryessa/North San Jose'
   route: '4'
   stopid: 'A10-1'
+  icon: mdi:train
+  service_type: 'train'
+
 - name: 'Berryessa/North San Jose to Daly City'
   route: '5'
   stopid: 'S40-2'
+  icon: mdi:train
+  service_type: 'train'
+
 - name: 'Daly City to Berryessa/North San Jose'
   route: '6'
   stopid: 'A10-1'
+  icon: mdi:train
+  service_type: 'train'
+
