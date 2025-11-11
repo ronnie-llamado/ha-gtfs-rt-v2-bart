@@ -79,7 +79,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
 
 def due_in_minutes(timestamp):
     """Get the remaining minutes from now until a given datetime object."""
-    diff = timestamp - datetime.now()
+    diff = timestamp - dt_util.now().replace(tzinfo=None)
     return int(diff.total_seconds() / 60)
 
 
