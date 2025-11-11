@@ -9,12 +9,12 @@ This fork has been modified specifically for Bay Area Rapid Transit (BART).
 
 ## Installation (HACS) - Recommended
 0. Have [HACS](https://hacs.xyz/) installed, this will allow you to easily update
-1. Add `https://github.com/mark1foley/ha-gtfs-rt-v2` as a [custom repository](https://hacs.xyz/docs/faq/custom_repositories/) as Type: Integration
+1. Add `https://github.com/ronnie-llamado/ha-gtfs-rt-v2-bart` as a [custom repository](https://hacs.xyz/docs/faq/custom_repositories/) as Type: Integration
 2. Click install under "GTFS Realtime", then restart your instance for the installation to take effect.
 
 ## Installation (Manual)
 1. Download this repository as a ZIP (green button, top right) and unzip the archive
-2. Copy `/custom_components/gtfs_rt` to your `<config_dir>/custom_components/` directory
+2. Copy `/custom_components/gtfs_rt_bart` to your `<config_dir>/custom_components/` directory
    * You will need to create the `custom_components` folder if it does not exist
    * On Hassio the final location will be `/config/custom_components/gtfs_rt`
    * On Hassbian the final location will be `/home/homeassistant/.homeassistant/custom_components/gtfs_rt`
@@ -24,46 +24,14 @@ This fork has been modified specifically for Bay Area Rapid Transit (BART).
 Add the following to your `configuration.yaml` file:
 
 ```yaml
-# Example entry for Queensland, Australia
+# Example entry
 
 sensor:
-  - platform: gtfs_rt
-    trip_update_url: 'https://gtfsrt.api.translink.com.au/api/realtime/SEQ/TripUpdates'
-    vehicle_position_url: 'https://gtfsrt.api.translink.com.au/api/realtime/SEQ/VehiclePositions'
-    route_delimiter: '-'
+  - platform: gtfs_rt_bart
     departures:
-    - name: Ferny Grove Train
-      route: BNFG
-      stopid: 600196
-      icon: mdi:train
-      service_type: Train
-    - name: Uni Qld Ferry
-      route: NHAM
-      stopid: 319665
-      icon: mdi:ferry
-      service_type: Ferry
-    - name: 1 0 7 Bus
-      route: 107
-      stopid: 4843
-      icon: mdi:bus
-      service_type: Bus
-```
-
-```yaml
-# Example entry for Long Island Rail Road, New York
-
-sensor:
-  - platform: gtfs_rt
-    trip_update_url: 'https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/lirr%2Fgtfs-lirr'
-    vehicle_position_url: 'https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/lirr%2Fgtfs-lirr'
-    x_api_key: <insert your API key here - see https://new.mta.info/developers>
-    departures:
-    - name: Bellmore Station to Penn Station
-      route: '1'
-      stopid: '16'
-      directionid: '1'
-      icon: mdi:train
-      service_type: 'train'
+    - name: 'Berryessa/North San Jose to Richmond'
+      route: '3'
+      stopid: 'S40-2'
 ```
 
 Configuration variables:
